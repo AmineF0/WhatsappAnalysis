@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>whatsapp convo analysis</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="./styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_content">
+            <main>
+                <div id="inpcon"><b>Upload The file here :   </b><input id="inputFile" name="file" type="file" class="file" data-browse-on-zone-click="true" required><br><br>
+                    <i>To find the file of a whatsapp, go to the conversation > click on the 3 dots icon > More > Export Chat > Without media. And save the file on your phone.</i>
+                </div>
+
+                <script src="./tools.js "></script>
+                <script type="text/javascript">
+                    document.getElementById('inputFile')
+                        .addEventListener('change', function(evt) {
+                            var f = evt.target.files[0];
+            
+                            if (f) {
+                                var r = new FileReader();
+                                r.onload = function(e) {
+                                    var contents = e.target.result;
+                                    process(contents);
+                                    document.getElementById("inpcon").innerHTML = "if you want to upload a new file , refresh the page"
+                                }
+                                r.readAsText(f);
+                            } else {
+                                alert("Failed to load file ");
+                            }
+                        })
+            
+                </script>
+
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-area me-1"></i>
+                                    time freq
+                                </div>
+                                <div class="card-body"><canvas id="time_freq" width="100%"></canvas></div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-xl-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-area me-1"></i>
+                                    day freq
+                                </div>
+                                <div class="card-body"><canvas id="day_freq" width="100%"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Words Count
+                        </div>
+                        <div class="card-body">
+                            <table id="datatablesSimple">
+                                <thead id="tableHeader"></thead>
+                                <tbody id="tableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+</body>
+
+</html>
