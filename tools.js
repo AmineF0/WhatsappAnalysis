@@ -9,6 +9,7 @@
  *      OPTIONAL filter by date
  * 
  */
+
  const COLORS = [
     '#4dc9f6',
     '#f67019',
@@ -98,15 +99,11 @@ class DayGraphData{
     }
     genDay(min_day, max_day){
         var labels = []
-        
-        const myMomentObject = moment(min_day, 'DD/MM/YYYY')
 
-        var min_date = moment(min_day, 'DD/MM/YYYY').toDate()
-        if(min_date < new Date("11/1/2021"))
-             min_date = new Date("11/1/2021")
+        var min_date = new Date(min_day);
         min_date.setDate(min_date.getDate()-1)
         
-        var max_date = moment(max_day, 'DD/MM/YYYY').toDate()
+        var max_date = new Date(max_day);
         max_date.setDate(max_date.getDate()+1)
 
         var curr = new Date(min_date.getTime())
@@ -123,8 +120,8 @@ class DayGraphData{
         var dd = day.getDate();
       
         return [
-                (dd>9 ? '' : '0') + dd,
                 (mm>9 ? '' : '0') + mm,
+                (dd>9 ? '' : '0') + dd,
                 day.getFullYear(),
                ].join('/');
     }
@@ -137,7 +134,7 @@ class STime {
         var tt = t[0].split(":")
         this.h = parseInt(tt[0])
         this.m = Math.floor(parseInt(tt[1]) / 15) * 15
-        //if (t[1] == "PM") this.h = (this.h+12)%24
+        if (t[1] == "PM") this.h = (this.h+12)%24
     }
 
     getTimeInt() {
@@ -159,19 +156,21 @@ class Message {
         this.freq = this.get_freq();
 
         var timeStr = data[0].split(', ');
-        this.day = moment(timeStr[0], 'DD/MM/YYYY').toDate()
+        this.day = new Date(timeStr[0])
         this.time = new STime(timeStr[1])
     }
+
     get_day(){
         var mm = this.day.getMonth() + 1; // getMonth() is zero-based
         var dd = this.day.getDate();
       
         return [
-                (dd>9 ? '' : '0') + dd,
                 (mm>9 ? '' : '0') + mm,
+                (dd>9 ? '' : '0') + dd,
                 this.day.getFullYear(),
                ].join('/');
     }
+
     get_freq() {
         var m = {};
         var words = this.words;
@@ -188,9 +187,7 @@ class Message {
 
 class Conversation {
     constructor(text) {
-        //var t = text.split(/(\n\d{1,2}.\d{1,2}.\d{1,2},.*M - )/g).slice(1)
-        var t = text.split(/(\n\d{1,2}.\d{1,2}.\d{1,2}.*- )/g).slice(1)
-        
+        var t = text.split(/(\n\d{1,2}.\d{1,2}.\d{1,2},.*M - )/g).slice(1)
         
         this.messages = []
 
@@ -198,7 +195,7 @@ class Conversation {
             this.messages.push(new Message((t[i] + t[i + 1]).replace('\n', ' ').trim()))
         }
 
-        
+
         this.min_day = this.messages[0].day
         this.max_day = this.messages[this.messages.length-1].day
 
@@ -358,7 +355,7 @@ function AreaChart(id, title, labels, data, others=[]){
 
     var datasets = [{
         label: title,
-        lineTension: 0.2,
+        lineTension: 0.,
         backgroundColor: "rgba(2,117,216,0.2)",
         borderColor: "rgba(2,117,216,1)",
         pointRadius: 1,
@@ -379,7 +376,7 @@ function AreaChart(id, title, labels, data, others=[]){
                 borderColor: other.color,
                 fill: false,
                 cubicInterpolationMode: 'monotone',
-                tension: 0.1
+                tension: 0.4
             }
         );
     }
